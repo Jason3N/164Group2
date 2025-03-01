@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from "react-router-dom";
-
+import CatPFP from "../assets/cat.svg"
 const HomePage: React.FC = () => {
   return (
     <>  
@@ -8,8 +8,9 @@ const HomePage: React.FC = () => {
     <div className = "p-8 text-white text-2xl font-bold bg-cyan-600">
       SQL Playground (GROUP 2 ON TOP)
     </div>
-    <div className = "ml-24 mt-10 text-5xl">
-        Welcome Home, Joey
+    <div className = "flex flex-row ml-24 mt-10 text-5xl">
+        <div className = "mt-6"> Welcome Home, Joey </div>
+        <img className = "ml-auto mr-96 h-32 w-32" src = {CatPFP}></img>
     </div>
       <div>
       <div className = "ml-16 mt-24 flex flex-row">
@@ -24,7 +25,6 @@ const HomePage: React.FC = () => {
         </div>
         {/* to put down a journey map based on whether user has completed so and so */}
         <div className = "ml-96">
-          JOURNEY MAP
           </div>
         </div>
         <div className = "text-white mt-64 h-auto bg-cyan-600">
