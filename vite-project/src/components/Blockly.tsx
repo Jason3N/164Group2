@@ -2,8 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import * as Blockly from 'blockly';
 import 'blockly/blocks';
 import 'blockly/javascript';
-import './CustomBlock';
-
+// Import all SQL custom blocks defined above
 
 interface BlocklyComponentProps {
   initialCategories?: ToolboxCategory[];
@@ -19,21 +18,31 @@ const BlocklyComponent: React.FC<BlocklyComponentProps> = ({ initialCategories }
   const blocklyDiv = useRef<HTMLDivElement>(null);
   const workspaceRef = useRef<Blockly.WorkspaceSvg | null>(null);
 
-  // Default categories if none are provided
-  const defaultCategories: ToolboxCategory[] = [
+  // SQL-specific categories
+  const sqlCategories: ToolboxCategory[] = [
     {
       name: 'SQL Commands',
       colour: '#5C81A6',
-      blocks: ['controls_if', 'logic_compare', 'logic_operation', 'logic_negate', 'logic_boolean']
+      blocks: ['sql_select', 'sql_insert', 'sql_update', 'sql_delete']
     },
     {
       name: 'Tables',
       colour: '#A6745C',
-      blocks: ['text', 'text_print', 'text_join', 'text_length']
+      blocks: ['sql_table', 'sql_join']
+    },
+    {
+      name: 'Columns',
+      colour: '#5CA694',
+      blocks: ['sql_column_list', 'sql_column', 'sql_string', 'sql_function']
+    },
+    {
+      name: 'Conditions',
+      colour: '#A65C8A',
+      blocks: ['sql_condition', 'logic_operation', 'logic_negate']
     }
   ];
 
-  const categories = initialCategories || defaultCategories;
+  const categories = initialCategories || sqlCategories;
 
   useEffect(() => {
     if (blocklyDiv.current) {
@@ -57,6 +66,15 @@ const BlocklyComponent: React.FC<BlocklyComponentProps> = ({ initialCategories }
         grid: { spacing: 20, length: 3, colour: '#ccc', snap: true },
         trashcan: true,
       });
+
+      // Add a function to convert blocks to SQL
+      (window as any).generateSQL = () => {
+        if (workspaceRef.current) {
+          const code = Blockly.JavaScript.workspaceToCode(workspaceRef.current);
+          return code;
+        }
+        return '';
+      };
     }
 
     return () => {
@@ -67,6 +85,11 @@ const BlocklyComponent: React.FC<BlocklyComponentProps> = ({ initialCategories }
   return (
     <div>
       <div ref={blocklyDiv} style={{ height: '500px', width: '1280px' }} />
+      <div style={{ marginTop: '10px' }}>
+        <button onClick={() => alert((window as any).generateSQL())}>
+          Generate SQL
+        </button>
+      </div>
     </div>
   );
 };
